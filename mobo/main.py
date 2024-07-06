@@ -48,7 +48,7 @@ for repeat in range(REPEAT_START, REPEAT_END):
     ##########################################################################################
 
     # Import MaxPro initial design from excel
-    samples = pd.read_csv("/Users/zhang/PycharmProjects/bo_mixed/snar/initial_design/TrainingSet1.csv")
+    samples = pd.read_csv("../initial_design/TrainingSet1.csv")
     samples = samples.rename(columns={"conc": "conc_dfnb"})
 
     train_x_qparego = samples.iloc[:,0:4]
@@ -69,6 +69,7 @@ for repeat in range(REPEAT_START, REPEAT_END):
 
     train_obj_true_qparego = torch.cat(train_obj_true_qparego_res, dim=0)
     train_obj_qparego = torch.cat(train_obj_qparego_res, dim=0)
+
 
     train_x_qehvi, train_obj_qehvi, train_obj_true_qehvi = (
         train_x_qparego,
@@ -92,44 +93,6 @@ for repeat in range(REPEAT_START, REPEAT_END):
     mll_qehvi, model_qehvi = initialize_model(train_x_qehvi, train_obj_qehvi, NOISE_LEVEL, NOISE_STRUCTURE)
     mll_qnehvi, model_qnehvi = initialize_model(train_x_qnehvi, train_obj_qnehvi, NOISE_LEVEL, NOISE_STRUCTURE)
 
-
-
-    # #########################################################################################
-    # unused here
-    # # generate initial training data and initialize model
-    #
-    # train_x_qparego = initial_design_lhs(problem_bounds, n_samples)
-    # train_obj_qparego = []
-    # train_obj_true_qparego = []
-    #
-    # for row in train_x_qparego:
-    #     res= reaction_simulator_2(torch.unsqueeze(row, dim=0))
-    #     train_obj_qparego.append(res)
-    #
-    #
-    # train_obj_qparego  = torch.cat(train_obj_qparego, dim=0)
-    # train_obj_true_qparego  =  train_obj_qparego + torch.randn_like(train_obj_qparego) * NOISE_SE
-    #
-    #
-    # train_x_qehvi, train_obj_qehvi, train_obj_true_qehvi = (
-    #     train_x_qparego,
-    #     train_obj_qparego,
-    #     train_obj_true_qparego,
-    # )
-    # train_x_qnehvi, train_obj_qnehvi, train_obj_true_qnehvi = (
-    #     train_x_qparego,
-    #     train_obj_qparego,
-    #     train_obj_true_qparego,
-    # )
-    # train_x_random, train_obj_random, train_obj_true_random = (
-    #     train_x_qparego,
-    #     train_obj_qparego,
-    #     train_obj_true_qparego,
-    # )
-    #
-    # mll_qparego, model_qparego = initialize_model(train_x_qparego, train_obj_qparego)
-    # mll_qehvi, model_qehvi = initialize_model(train_x_qehvi, train_obj_qehvi)
-    # mll_qnehvi, model_qnehvi = initialize_model(train_x_qnehvi, train_obj_qnehvi)
 
     ##########################################################################################
 
@@ -218,11 +181,6 @@ for repeat in range(REPEAT_START, REPEAT_END):
             volume = bd.compute_hypervolume().item()
             hvs_list.append(volume)
 
-        # reinitialize the models so they are ready for fitting on next iteration
-        # Note: we find improved performance from not warm starting the model hyperparameters
-        # using the hyperparameters from the previous iteration
-
-
         mll_qparego, model_qparego = initialize_model(train_x_qparego, train_obj_qparego, NOISE_LEVEL, NOISE_STRUCTURE)
         mll_qehvi, model_qehvi = initialize_model(train_x_qehvi, train_obj_qehvi, NOISE_LEVEL, NOISE_STRUCTURE)
         mll_qnehvi, model_qnehvi = initialize_model(train_x_qnehvi, train_obj_qnehvi, NOISE_LEVEL, NOISE_STRUCTURE)
@@ -233,8 +191,6 @@ for repeat in range(REPEAT_START, REPEAT_END):
         t1 = time.monotonic()
         if verbose:
             print(
-                # f"\nBatch {iteration:>2}: Hypervolume (random, qNParEGO, qEHVI, qNEHVI) = "
-                # f"({hvs_random[-1]:>4.2f}, {hvs_qparego[-1]:>4.2f}, {hvs_qehvi[-1]:>4.2f}, {hvs_qnehvi[-1]:>4.2f}), "
                 f"time = {t1-t0:>4.2f}.",
                 end="",
             )
@@ -242,8 +198,6 @@ for repeat in range(REPEAT_START, REPEAT_END):
             time_all.append(t1-t0)
         else:
             print(".", end="")
-
-    print("average_time", np.sum(time_all))
 
     ##########################################################################################
     # save train_x, train_obj to csvs
