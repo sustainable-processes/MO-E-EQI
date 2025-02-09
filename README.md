@@ -1,5 +1,6 @@
-This is repository for Multi-Objective Expected Quantile Improvement (MO-E-EQI) for chemical reaction optimisation!
+Multi-objective Bayesian optimization (MOBO) has shown to be a promising tool for reaction development. However, noise is usually inevitable in experimental and chemical processes, and finding reliable solutions is challenging when the noise is unknown or significant. In this study, we focus on finding a set of optimal reaction conditions using multi-objective Euclidian expected quantile improvement (MO-E-EQI) under noisy settings. First, the performance of MO-E-EQI is evaluated by comparing with some recent MOBO algorithms in silico with linear and log-linear heteroscedastic noise structures and different magnitudes. It is noticed that high noise can degrade the performance of MOBO algorithms. MO-E-EQI shows robust performance in terms of hypervolume-based metric, coverage metric and number of solutions on the Pareto front. Finally, MO-E-EQI is implemented in a real case to optimize an esterification reaction to achieve the maximum space-time-yield and the minimal E-factor. The algorithm identifies a clear trade-off between the two objectives.
 
-MO-E-EQI is implemented in RStudio
+MO-E-EQI is implemented in RStudio and will be translate to python.
 
-Other MOBO algorithms are implemented in python
+This is the repository for the paper:
+https://www.sciencedirect.com/science/article/pii/S0098135424004010
